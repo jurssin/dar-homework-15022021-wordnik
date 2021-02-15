@@ -45,6 +45,8 @@ class MainViewController: UIViewController {
         return activityIndicator
     }()
     
+    var likes: [String] = []
+    
     var player: AVPlayer?
         
     let provider = MoyaProvider<APIService>()
@@ -204,10 +206,13 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         cell.synonymsWordLabel.text = wordsToDisplay.synonyms[indexPath.row]
         cell.searchWord.text = wordsToDisplay.searchText
         cell.definitionLabel.text = wordsToDisplay.definitionText
+        cell.favouritesButton.tag = indexPath.row
         if (cell.searchWord.text != "" && cell.searchWord.text != nil) {
             cell.playWordButton.setBackgroundImage(UIImage(systemName: "play"), for: .normal)
+            cell.favouritesButton.setBackgroundImage(UIImage(systemName: "star"), for: .normal)
         }
         cell.playWordButton.addTarget(self, action: #selector(playAudio), for: .touchUpInside)
+        cell.favouritesButton.addTarget(self, action: #selector(addToFavourites(sender:)), for: .touchUpInside)
         return cell
     }
     
@@ -221,6 +226,10 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         player?.play()
         
         print("playing \(audioURL)")
+    }
+    
+    @objc func addToFavourites(sender: UIButton) {
+        
     }
 }
 

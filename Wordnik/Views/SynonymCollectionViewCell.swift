@@ -13,6 +13,7 @@ class SynonymCollectionViewCell: UICollectionViewCell {
     lazy var searchWord: UILabel = {
         let label = UILabel()
         label.textColor = .black
+        label.layer.cornerRadius = 8
         label.font = UIFont.boldSystemFont(ofSize: 25)
         label.backgroundColor = .systemGray6
         return label
@@ -21,6 +22,7 @@ class SynonymCollectionViewCell: UICollectionViewCell {
     lazy var definitionLabel: UILabel = {
         let label = UILabel()
         label.textColor = .systemGray2
+        label.layer.cornerRadius = 8
         label.font = UIFont.italicSystemFont(ofSize: 15)
         label.numberOfLines = 5
         //label.backgroundColor = .blue
@@ -28,6 +30,12 @@ class SynonymCollectionViewCell: UICollectionViewCell {
     }()
     
     lazy var playWordButton: UIButton = {
+        let button = UIButton(type: UIButton.ButtonType.system)
+        button.tintColor = .black
+        return button
+    }()
+    
+    lazy var favouritesButton: UIButton = {
         let button = UIButton(type: UIButton.ButtonType.system)
         button.tintColor = .black
         return button
@@ -62,7 +70,7 @@ class SynonymCollectionViewCell: UICollectionViewCell {
         self.layer.shadowRadius = 5
     }
     private func setupView() {
-        let elementsUI = [searchWord, synonymsWordLabel, playWordButton, definitionLabel]
+        let elementsUI = [searchWord, synonymsWordLabel, playWordButton, definitionLabel, favouritesButton]
         elementsUI.forEach { (element) in
             self.addSubview(element)
             element.translatesAutoresizingMaskIntoConstraints = false
@@ -82,7 +90,12 @@ class SynonymCollectionViewCell: UICollectionViewCell {
             definitionLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
 
             synonymsWordLabel.topAnchor.constraint(equalTo: definitionLabel.bottomAnchor, constant: 10),
-            synonymsWordLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20)
+            synonymsWordLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
+            
+            favouritesButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
+            favouritesButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -20),
+            favouritesButton.heightAnchor.constraint(equalToConstant: 30),
+            favouritesButton.widthAnchor.constraint(equalToConstant: 30)
             
         ])
         
