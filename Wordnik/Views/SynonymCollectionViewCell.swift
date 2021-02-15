@@ -10,14 +10,6 @@ import UIKit
 
 class SynonymCollectionViewCell: UICollectionViewCell {
     
-    lazy var activityIndicator: UIActivityIndicatorView = {
-        let activityIndicator = UIActivityIndicatorView()
-        activityIndicator.style = .medium
-        activityIndicator.hidesWhenStopped = true
-        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-        return activityIndicator
-    }()
-    
     lazy var searchWord: UILabel = {
         let label = UILabel()
         label.textColor = .black

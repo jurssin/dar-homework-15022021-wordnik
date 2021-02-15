@@ -37,11 +37,16 @@ class MainViewController: UIViewController {
         return collectionView
     }()
 
+    lazy var activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView()
+        activityIndicator.style = .medium
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        return activityIndicator
+    }()
     
     var player: AVPlayer?
-    
-    var cardView = CardView()
-    
+        
     let provider = MoyaProvider<APIService>()
     
     var wordsToDisplay = WordsToDisplay()
@@ -62,8 +67,9 @@ class MainViewController: UIViewController {
         self.tabBarController?.tabBar.items![0].image = UIImage(systemName: "house")
         self.tabBarController?.tabBar.items![1].image = UIImage(systemName: "star")
         self.tabBarController?.tabBar.items![1].title = "Favourite Words"
+        self.tabBarController?.tabBar.tintColor = .black
         
-        let elementsUI = [searchBar, synonymsCollectionView]
+        let elementsUI = [searchBar, synonymsCollectionView, activityIndicator]
         elementsUI.forEach { (element) in
             self.view.addSubview(element)
             element.translatesAutoresizingMaskIntoConstraints = false
@@ -77,13 +83,18 @@ class MainViewController: UIViewController {
             synonymsCollectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 30),
             synonymsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             synonymsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            synonymsCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -30)
+            synonymsCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -30),
+            
+            activityIndicator.centerYAnchor.constraint(equalTo: synonymsCollectionView.centerYAnchor),
+            activityIndicator.centerXAnchor.constraint(equalTo: synonymsCollectionView.centerXAnchor)
+
         ])
     }
     
     // MARK: - NETWORKING
     
     private func getSynonyms(_ text: String) {
+        activityIndicator.startAnimating()
         provider.request(.getSynonyms(text: text)) { [weak self] (result) in
             switch result {
             case .success(let response):
@@ -101,18 +112,20 @@ class MainViewController: UIViewController {
                     let alert = UIAlertController(title: "Error", message: "\(error.localizedDescription)", preferredStyle: .alert)
                     let action = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
                     alert.addAction(action)
-                    //self?.present(alert, animated: true)
+                    self?.present(alert, animated: true)
                     self?.wordsToDisplay.searchText = ""
                     self?.wordsToDisplay.synonyms = []
 
                     self?.synonymsCollectionView.reloadData()
-
+                    
                     print("Parsing error: \(error.localizedDescription)")
                 }
             case .failure(let error):
                 let requestError = error as NSError
                 print("Request error: \(requestError.localizedDescription), code: \(requestError.code)")
             }
+            self?.activityIndicator.stopAnimating()
+
         }
     }
     private func getDefinition(_ text: String) {
