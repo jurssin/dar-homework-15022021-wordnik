@@ -11,6 +11,9 @@ import Moya
 
 enum APIService {
     case getSynonyms(text: String)
+    case getPronounciation(text: String)
+    case getDefinition(text: String)
+    case getAudio(text: String)
 }
 
 extension APIService: TargetType {
@@ -22,12 +25,24 @@ extension APIService: TargetType {
         switch self {
         case .getSynonyms(let text):
             return "\(text)/relatedWords"
+        case .getPronounciation(let text):
+            return "\(text)/pronunciations"
+        case .getDefinition(let text):
+            return "\(text)/definitions"
+        case .getAudio(let text):
+            return "\(text)/audio"
         }
     }
     
     var method: Moya.Method {
         switch self {
         case .getSynonyms:
+            return .get
+        case .getPronounciation:
+            return .get
+        case .getDefinition:
+            return .get
+        case .getAudio:
             return .get
         }
     }
@@ -42,7 +57,33 @@ extension APIService: TargetType {
             let params: [String : String] = [
                 "useCanonical" : "false",
                 "relationshipTypes" : "synonym",
-                "limitPerRelationshipType" : "5",
+                "limitPerRelationshipType" : "20",
+                "api_key" : "a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5"
+            ]
+            return .requestParameters(parameters: params, encoding: URLEncoding.default)
+            
+        case .getPronounciation:
+            let params: [String : String] = [
+                "useCanonical" : "false",
+                "limitPerRelationshipType" : "1",
+                "api_key" : "a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5"
+            ]
+            return .requestParameters(parameters: params, encoding: URLEncoding.default)
+
+        case .getDefinition:
+            let params: [String : String] = [
+                "limit" : "1",
+                "includeRelated" : "false",
+                "sourceDictionaries" : "century",
+                "useCanonical" : "false",
+                "includeTags" : "false",
+                "api_key" : "a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5"
+            ]
+            return .requestParameters(parameters: params, encoding: URLEncoding.default)
+        case .getAudio:
+            let params: [String : String] = [
+                "useCanonical" : "false",
+                "limit" : "1",
                 "api_key" : "a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5"
             ]
             return .requestParameters(parameters: params, encoding: URLEncoding.default)
@@ -52,6 +93,4 @@ extension APIService: TargetType {
     var headers: [String : String]? {
         return ["Content-Type" : "application/json"]
     }
-    
-    
 }

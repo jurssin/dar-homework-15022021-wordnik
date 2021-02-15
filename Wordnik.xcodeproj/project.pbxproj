@@ -21,6 +21,7 @@
 		CEE68E5425D81ECC0043C360 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE68E5325D81ECC0043C360 /* APIService.swift */; };
 		CEE68E5625D83A4C0043C360 /* WordnikResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE68E5525D83A4C0043C360 /* WordnikResponse.swift */; };
 		CEE68E5825D8F8860043C360 /* SynonymCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE68E5725D8F8860043C360 /* SynonymCollectionViewCell.swift */; };
+		CEE68E5A25DA1F940043C360 /* WordsToDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE68E5925DA1F940043C360 /* WordsToDisplay.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +38,7 @@
 		CEE68E5325D81ECC0043C360 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		CEE68E5525D83A4C0043C360 /* WordnikResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordnikResponse.swift; sourceTree = "<group>"; };
 		CEE68E5725D8F8860043C360 /* SynonymCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SynonymCollectionViewCell.swift; sourceTree = "<group>"; };
+		CEE68E5925DA1F940043C360 /* WordsToDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordsToDisplay.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +107,7 @@
 				CEE68E5125D811D20043C360 /* Helper.swift */,
 				CEE68E5325D81ECC0043C360 /* APIService.swift */,
 				CEE68E5525D83A4C0043C360 /* WordnikResponse.swift */,
+				CEE68E5925DA1F940043C360 /* WordsToDisplay.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -205,6 +208,7 @@
 				CEE68E5825D8F8860043C360 /* SynonymCollectionViewCell.swift in Sources */,
 				CE1AEEBF25D7DAF100E8030E /* AppDelegate.swift in Sources */,
 				CE1AEEC125D7DAF100E8030E /* SceneDelegate.swift in Sources */,
+				CEE68E5A25DA1F940043C360 /* WordsToDisplay.swift in Sources */,
 				CEE68E4925D805170043C360 /* CardView.swift in Sources */,
 				CEE68E5225D811D20043C360 /* Helper.swift in Sources */,
 			);
