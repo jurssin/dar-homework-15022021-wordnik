@@ -107,6 +107,7 @@ class MainViewController: UIViewController {
                     }
                     self?.wordsToDisplay.synonyms = synonyms
                     self?.wordsToDisplay.searchText = text
+                    self?.likes = [String](repeating: "star", count: self?.wordsToDisplay.synonyms.count ?? 0)
                     self?.synonymsCollectionView.reloadData()
                     print(self?.wordsToDisplay.synonyms ?? "")
                     
@@ -116,6 +117,7 @@ class MainViewController: UIViewController {
                     alert.addAction(action)
                     self?.present(alert, animated: true)
                     self?.wordsToDisplay.searchText = ""
+                    self?.likes = []
                     self?.wordsToDisplay.synonyms = []
 
                     self?.synonymsCollectionView.reloadData()
@@ -176,10 +178,7 @@ class MainViewController: UIViewController {
 
 }
 extension MainViewController: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        //self.synonymsCollectionView.reloadData()
-    }
-    
+
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let searchText = searchBar.text else { return }
         self.getSynonyms(searchText)
@@ -187,11 +186,6 @@ extension MainViewController: UISearchBarDelegate {
         self.getAudio(searchText)
         searchBar.endEditing(true)
     }
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        
-        print("\(#function)")
-    }
-    
 }
 
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -209,7 +203,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         cell.favouritesButton.tag = indexPath.row
         if (cell.searchWord.text != "" && cell.searchWord.text != nil) {
             cell.playWordButton.setBackgroundImage(UIImage(systemName: "play"), for: .normal)
-            cell.favouritesButton.setBackgroundImage(UIImage(systemName: "star"), for: .normal)
+            cell.favouritesButton.setBackgroundImage(UIImage(systemName: likes[indexPath.row]), for: .normal)
         }
         cell.playWordButton.addTarget(self, action: #selector(playAudio), for: .touchUpInside)
         cell.favouritesButton.addTarget(self, action: #selector(addToFavourites(sender:)), for: .touchUpInside)
@@ -229,7 +223,13 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     @objc func addToFavourites(sender: UIButton) {
-        
+        if likes[sender.tag] == "star" {
+            likes[sender.tag] = "star.fill"
+        }
+        else {
+            likes[sender.tag] = "star"
+        }
+        sender.setBackgroundImage(UIImage(systemName: likes[sender.tag]), for: .normal)
     }
 }
 
