@@ -25,13 +25,14 @@ class MainViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.itemSize = CGSize(width: self.view.frame.width * 0.8, height: self.view.frame.height * 0.48)
-        layout.sectionInset = UIEdgeInsets(top: 10, left: self.view.frame.width * 0.1, bottom: 10, right: 40)
-        layout.minimumLineSpacing = 50
+        layout.sectionInset = UIEdgeInsets(top: 10, left: (view.frame.width - layout.itemSize.width) / 2, bottom: 10, right: (view.frame.width - layout.itemSize.width) / 2)
+        layout.minimumLineSpacing = view.frame.width - layout.itemSize.width
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .white
         collectionView.register(SynonymCollectionViewCell.self, forCellWithReuseIdentifier: "SynonymCollectionViewCell")
         collectionView.showsHorizontalScrollIndicator = false
+        collectionView.isPagingEnabled = true
         collectionView.delegate = self
         collectionView.dataSource = self
         return collectionView
@@ -77,6 +78,7 @@ class MainViewController: UIViewController {
             element.translatesAutoresizingMaskIntoConstraints = false
         }
         NSLayoutConstraint.activate([
+            
             searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -89,7 +91,6 @@ class MainViewController: UIViewController {
             
             activityIndicator.centerYAnchor.constraint(equalTo: synonymsCollectionView.centerYAnchor),
             activityIndicator.centerXAnchor.constraint(equalTo: synonymsCollectionView.centerXAnchor)
-
         ])
     }
     

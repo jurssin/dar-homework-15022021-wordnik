@@ -36,13 +36,7 @@ extension APIService: TargetType {
     
     var method: Moya.Method {
         switch self {
-        case .getSynonyms:
-            return .get
-        case .getPronounciation:
-            return .get
-        case .getDefinition:
-            return .get
-        case .getAudio:
+        case .getSynonyms, .getAudio, .getDefinition, .getPronounciation:
             return .get
         }
     }
