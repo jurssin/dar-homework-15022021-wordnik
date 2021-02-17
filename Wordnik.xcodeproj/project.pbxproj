@@ -13,7 +13,7 @@
 		CE1AEEC825D7DAF400E8030E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE1AEEC725D7DAF400E8030E /* Assets.xcassets */; };
 		CE1AEECB25D7DAF400E8030E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE1AEEC925D7DAF400E8030E /* LaunchScreen.storyboard */; };
 		CE1AEED325D7DD7000E8030E /* FavouriteWordsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1AEED225D7DD7000E8030E /* FavouriteWordsTableViewController.swift */; };
-		CEE68E4925D805170043C360 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE68E4825D805170043C360 /* CardView.swift */; };
+		CE73559825DD057F00FE5519 /* MainViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE73559725DD057F00FE5519 /* MainViewPresenter.swift */; };
 		CEE68E4C25D8110A0043C360 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = CEE68E4B25D8110A0043C360 /* Moya */; };
 		CEE68E4E25D8110A0043C360 /* ReactiveMoya in Frameworks */ = {isa = PBXBuildFile; productRef = CEE68E4D25D8110A0043C360 /* ReactiveMoya */; };
 		CEE68E5025D8110A0043C360 /* RxMoya in Frameworks */ = {isa = PBXBuildFile; productRef = CEE68E4F25D8110A0043C360 /* RxMoya */; };
@@ -33,7 +33,7 @@
 		CE1AEECA25D7DAF400E8030E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CE1AEECC25D7DAF400E8030E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CE1AEED225D7DD7000E8030E /* FavouriteWordsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteWordsTableViewController.swift; sourceTree = "<group>"; };
-		CEE68E4825D805170043C360 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
+		CE73559725DD057F00FE5519 /* MainViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewPresenter.swift; sourceTree = "<group>"; };
 		CEE68E5125D811D20043C360 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		CEE68E5325D81ECC0043C360 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		CEE68E5525D83A4C0043C360 /* WordnikResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordnikResponse.swift; sourceTree = "<group>"; };
@@ -74,42 +74,12 @@
 		CE1AEEBD25D7DAF100E8030E /* Wordnik */ = {
 			isa = PBXGroup;
 			children = (
-				CE1AEED625D7DEF000E8030E /* Models */,
-				CE1AEED425D7DEDF00E8030E /* Views */,
-				CE1AEED525D7DEE900E8030E /* Controllers */,
-				CE1AEECC25D7DAF400E8030E /* Info.plist */,
+				CE73559925DD058D00FE5519 /* FavouritesModule */,
+				CE73559325DCEBB100FE5519 /* MainModule */,
 				CE1AEED725D7DEFC00E8030E /* SupportingFiles */,
+				CE1AEECC25D7DAF400E8030E /* Info.plist */,
 			);
 			path = Wordnik;
-			sourceTree = "<group>";
-		};
-		CE1AEED425D7DEDF00E8030E /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				CEE68E4825D805170043C360 /* CardView.swift */,
-				CEE68E5725D8F8860043C360 /* SynonymCollectionViewCell.swift */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
-		CE1AEED525D7DEE900E8030E /* Controllers */ = {
-			isa = PBXGroup;
-			children = (
-				CE1AEEC225D7DAF100E8030E /* MainViewController.swift */,
-				CE1AEED225D7DD7000E8030E /* FavouriteWordsTableViewController.swift */,
-			);
-			path = Controllers;
-			sourceTree = "<group>";
-		};
-		CE1AEED625D7DEF000E8030E /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				CEE68E5125D811D20043C360 /* Helper.swift */,
-				CEE68E5325D81ECC0043C360 /* APIService.swift */,
-				CEE68E5525D83A4C0043C360 /* WordnikResponse.swift */,
-				CEE68E5925DA1F940043C360 /* WordsToDisplay.swift */,
-			);
-			path = Models;
 			sourceTree = "<group>";
 		};
 		CE1AEED725D7DEFC00E8030E /* SupportingFiles */ = {
@@ -121,6 +91,76 @@
 				CE1AEEC025D7DAF100E8030E /* SceneDelegate.swift */,
 			);
 			path = SupportingFiles;
+			sourceTree = "<group>";
+		};
+		CE73559325DCEBB100FE5519 /* MainModule */ = {
+			isa = PBXGroup;
+			children = (
+				CE73559625DD04E900FE5519 /* Model */,
+				CE73559525DD04E200FE5519 /* View */,
+				CE73559425DD04D400FE5519 /* Presenter */,
+			);
+			path = MainModule;
+			sourceTree = "<group>";
+		};
+		CE73559425DD04D400FE5519 /* Presenter */ = {
+			isa = PBXGroup;
+			children = (
+				CE73559725DD057F00FE5519 /* MainViewPresenter.swift */,
+			);
+			path = Presenter;
+			sourceTree = "<group>";
+		};
+		CE73559525DD04E200FE5519 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				CE1AEEC225D7DAF100E8030E /* MainViewController.swift */,
+				CEE68E5725D8F8860043C360 /* SynonymCollectionViewCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		CE73559625DD04E900FE5519 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				CEE68E5125D811D20043C360 /* Helper.swift */,
+				CEE68E5325D81ECC0043C360 /* APIService.swift */,
+				CEE68E5525D83A4C0043C360 /* WordnikResponse.swift */,
+				CEE68E5925DA1F940043C360 /* WordsToDisplay.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		CE73559925DD058D00FE5519 /* FavouritesModule */ = {
+			isa = PBXGroup;
+			children = (
+				CE73559C25DD05A800FE5519 /* View */,
+				CE73559B25DD05A100FE5519 /* Presenter */,
+				CE73559A25DD059C00FE5519 /* Model */,
+			);
+			path = FavouritesModule;
+			sourceTree = "<group>";
+		};
+		CE73559A25DD059C00FE5519 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		CE73559B25DD05A100FE5519 /* Presenter */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Presenter;
+			sourceTree = "<group>";
+		};
+		CE73559C25DD05A800FE5519 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				CE1AEED225D7DD7000E8030E /* FavouriteWordsTableViewController.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -203,13 +243,13 @@
 			files = (
 				CEE68E5625D83A4C0043C360 /* WordnikResponse.swift in Sources */,
 				CE1AEEC325D7DAF100E8030E /* MainViewController.swift in Sources */,
+				CE73559825DD057F00FE5519 /* MainViewPresenter.swift in Sources */,
 				CEE68E5425D81ECC0043C360 /* APIService.swift in Sources */,
 				CE1AEED325D7DD7000E8030E /* FavouriteWordsTableViewController.swift in Sources */,
 				CEE68E5825D8F8860043C360 /* SynonymCollectionViewCell.swift in Sources */,
 				CE1AEEBF25D7DAF100E8030E /* AppDelegate.swift in Sources */,
 				CE1AEEC125D7DAF100E8030E /* SceneDelegate.swift in Sources */,
 				CEE68E5A25DA1F940043C360 /* WordsToDisplay.swift in Sources */,
-				CEE68E4925D805170043C360 /* CardView.swift in Sources */,
 				CEE68E5225D811D20043C360 /* Helper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

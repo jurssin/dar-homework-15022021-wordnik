@@ -46,16 +46,16 @@ class MainViewController: UIViewController {
         return activityIndicator
     }()
     
-    var likes: [String] = []
     
     var player: AVPlayer?
-        
-    let provider = MoyaProvider<APIService>()
     
-    var wordsToDisplay = WordsToDisplay()
-        
+    var presenter: MainViewPresenterProtocol!
+            
+    var cellInfo = WordsToDisplay()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.presenter = MainPresenter(view: self)
         setupViews()
     }
     
@@ -95,142 +95,98 @@ class MainViewController: UIViewController {
     }
     
     // MARK: - NETWORKING
-    
-    private func getSynonyms(_ text: String) {
-        activityIndicator.startAnimating()
-        provider.request(.getSynonyms(text: text)) { [weak self] (result) in
-            switch result {
-            case .success(let response):
-                do {
-                    let wordnikResponse = try JSONDecoder().decode([WordnikResponse].self, from: response.data)
-                    guard let synonyms = wordnikResponse.first?.words else {
-                        return
-                    }
-                    self?.wordsToDisplay.synonyms = synonyms
-                    self?.wordsToDisplay.searchText = text
-                    self?.likes = [String](repeating: "star", count: self?.wordsToDisplay.synonyms.count ?? 0)
-                    self?.synonymsCollectionView.reloadData()
-                    print(self?.wordsToDisplay.synonyms ?? "")
-                    
-                } catch let error {
-                    let alert = UIAlertController(title: "Error", message: "\(error.localizedDescription)", preferredStyle: .alert)
-                    let action = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-                    alert.addAction(action)
-                    self?.present(alert, animated: true)
-                    self?.wordsToDisplay.searchText = ""
-                    self?.likes = []
-                    self?.wordsToDisplay.synonyms = []
-
-                    self?.synonymsCollectionView.reloadData()
-                    
-                    print("Parsing error: \(error.localizedDescription)")
-                }
-            case .failure(let error):
-                let requestError = error as NSError
-                print("Request error: \(requestError.localizedDescription), code: \(requestError.code)")
-            }
-            self?.activityIndicator.stopAnimating()
-
-        }
-    }
-    private func getDefinition(_ text: String) {
-        provider.request(.getDefinition(text: text)) { [weak self] (result) in
-            switch result {
-            case .success(let response):
-                do {
-                    let data = try JSONSerialization.jsonObject(with: response.data, options: []) as? [[String : Any]]
-                    guard let definition = data?.first?["text"] as? String else {
-                        self?.wordsToDisplay.definitionText = ""
-
-                        print("Cannot find this word's definition")
-                        return
-                    }
-                    self?.wordsToDisplay.definitionText = definition
-                    print("def: - ", definition)
-                    self?.synonymsCollectionView.reloadData()
-                } catch let error {
-                    print("Error parsing: \(error.localizedDescription)")
-                }
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-        }
-    }
-    
-    private func getAudio(_ text: String) {
-        provider.request(.getAudio(text: text)) { [weak self] (result) in
-            switch result {
-            case .success(let response):
-                do {
-                    guard let jsonData = try JSONSerialization.jsonObject(with: response.data, options: []) as? [[String : Any]], let audioURL = jsonData.first?["fileUrl"] as? String else {
-                        return
-                    }
-                    self?.wordsToDisplay.soundURL = audioURL
-                    print("audio data - \(audioURL)")
-                } catch let error {
-                    print(error.localizedDescription)
-                }
-                
-            case .failure(let error):
-                print("getAudio error: \(error.localizedDescription)")
-            }
-        }
-    }
-
 }
 extension MainViewController: UISearchBarDelegate {
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let searchText = searchBar.text else { return }
-        self.getSynonyms(searchText)
-        self.getDefinition(searchText)
-        self.getAudio(searchText)
+        self.presenter.getInputText(text: searchText)
+//        self.getAudio(searchText)
         searchBar.endEditing(true)
+        synonymsCollectionView.reloadData()
     }
 }
 
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return wordsToDisplay.synonyms.count
+        return cellInfo.synonyms.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SynonymCollectionViewCell", for: indexPath) as! SynonymCollectionViewCell
         
         cell.backgroundColor = .white
-        cell.synonymsWordLabel.text = wordsToDisplay.synonyms[indexPath.row]
-        cell.searchWord.text = wordsToDisplay.searchText
-        cell.definitionLabel.text = wordsToDisplay.definitionText
+        cell.synonymsWordLabel.text = cellInfo.synonyms[indexPath.row]
+        cell.definitionLabel.text = cellInfo.definitionText
+        cell.searchWord.text = cellInfo.searchText
+
         cell.favouritesButton.tag = indexPath.row
         if (cell.searchWord.text != "" && cell.searchWord.text != nil) {
             cell.playWordButton.setBackgroundImage(UIImage(systemName: "play"), for: .normal)
-            cell.favouritesButton.setBackgroundImage(UIImage(systemName: likes[indexPath.row]), for: .normal)
+//            cell.favouritesButton.setBackgroundImage(UIImage(systemName: likes[indexPath.row]), for: .normal)
         }
-        cell.playWordButton.addTarget(self, action: #selector(playAudio), for: .touchUpInside)
-        cell.favouritesButton.addTarget(self, action: #selector(addToFavourites(sender:)), for: .touchUpInside)
+        cell.playWordButton.addTarget(self, action: #selector(playAudio1), for: .touchUpInside)
+//        cell.favouritesButton.addTarget(self, action: #selector(addToFavourites(sender:)), for: .touchUpInside)
+        
         return cell
     }
     
-    @objc func playAudio() {
-        guard let audio = wordsToDisplay.soundURL, let audioURL = URL(string: audio) else {
+    @objc func playAudio1() {
+        guard let audio = cellInfo.soundURL, let audioURL = URL(string: audio) else {
             return
         }
         let playerItem = AVPlayerItem(url: audioURL)
         self.player = AVPlayer(playerItem: playerItem)
         player?.volume = 1.0
         player?.play()
-        
+
         print("playing \(audioURL)")
     }
     
-    @objc func addToFavourites(sender: UIButton) {
-        if likes[sender.tag] == "star" {
-            likes[sender.tag] = "star.fill"
-        }
-        else {
-            likes[sender.tag] = "star"
-        }
-        sender.setBackgroundImage(UIImage(systemName: likes[sender.tag]), for: .normal)
+//    @objc func addToFavourites(sender: UIButton) {
+//        if likes[sender.tag] == "star" {
+//            likes[sender.tag] = "star.fill"
+//        }
+//        else {
+//            likes[sender.tag] = "star"
+//        }
+//        sender.setBackgroundImage(UIImage(systemName: likes[sender.tag]), for: .normal)
+//    }
+}
+
+extension MainViewController: MainViewProtocol {
+    func playAudio(url: String) {
+        cellInfo.soundURL = url
+    }
+    
+    func showActivityIndicator() {
+        activityIndicator.startAnimating()
+    }
+    
+    func hideActivityIndicator() {
+        activityIndicator.stopAnimating()
+    }
+    
+    func setSearchText(text: String) {
+        cellInfo.searchText = text
+    }
+    
+    func setDefinition(text: String) {
+        cellInfo.definitionText = text
+        synonymsCollectionView.reloadData()
+    }
+    
+    func showError(text: String) {
+        let alert = UIAlertController(title: "Error", message: "\(text)", preferredStyle: .alert)
+        let action = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alert.addAction(action)
+        self.present(alert, animated: true)
+        //synonymsCollectionView.reloadData()
+
+    }
+    func setSynonyms(text: [String]) {
+        cellInfo.synonyms = text
+        synonymsCollectionView.reloadData()
     }
 }
 
