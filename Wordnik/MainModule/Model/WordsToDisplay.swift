@@ -7,6 +7,7 @@
 //
 
 import Foundation
+
 struct WordsToDisplay {
     
     var synonyms: [String] = ["Swift", "Xcode", "Optional", "Apple", "Next Step", "Steve"]
